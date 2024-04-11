@@ -1,7 +1,14 @@
 #ifndef LINKED_LIST1
 #define LINKED_LIST1
 #include <iostream>
-#include "C:\Users\YOUSEF\OneDrive\Desktop\Cxxdroid\linked test.h"
+#include "C:\Users\YOUSEF\OneDrive\Desktop\Cxxdroid\linked test.h" //this is directory in my device change it to match yours also replace \ with /
+/*
+example:
+#include "C:/medo/linked test.h"
+#include "C:/saboy/didi/koko/linked test.h"
+gave those examples to be clear
+just to be clear
+*/
 using std::cout;
 template<class T>
 T LinkedList<T>::operator[](unsigned i){

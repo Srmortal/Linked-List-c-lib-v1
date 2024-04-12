@@ -252,4 +252,4 @@ void LinkedList<T>::removelast2()
     delete tail;
     sz--;
 }
-#endif
+#endif // LINKED_LIST1

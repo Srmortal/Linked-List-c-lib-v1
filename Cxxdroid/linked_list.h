@@ -1,61 +1,82 @@
 #ifndef LINKED_LIST
 #define LINKED_LIST
-enum print_order{
-    Forward,
-    Backward
-};
+#include <vector>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <iostream>
+#include <sstream>
+using namespace std;
+template<class T>
+class Node;
 template<class T>
 class LinkedList{
 private:
-    class Node{ 
-    public:
-        T d;
-        Node* next;
-        Node* prev;
-        Node(const T v){
-            d=v;
-            next = nullptr;
-            prev = nullptr;
-        }
-        Node(){
-            next=nullptr;
-            prev=nullptr;
-        }
-    };
-    Node *head;
-    size_t sz;
+    
+    Node<T> *head;
+    unsigned sz;
 public:
     LinkedList() {
         head = nullptr;
         sz = 0;
     }
     T operator[](unsigned index);
-    Node* operator+(int index);
-    int search(T c);
-    Node *searchptr(T c);
-    Node *headgetter();
-    Node *tailgetter();
-    size_t size();
+    int search(T val);
+    Node<T>* operator+(int index);
+    Node<T> *searchptr(T val);
+    bool is_found(T val);
+    Node<T> *headgetter();
+    Node<T> *tailgetter();
+    int size();
+    unsigned sizeno();
     bool is_empty();
+    vector<T> to_vector();
+    string to_string();
+    stack<T> to_stack();
+    queue<T> to_queue();
+    deque<T> to_deque();
+    void clear();
 public:
-    void printlinked1();
-    void insertfront1(const T c);
-    void insertend1(const T c);
-    void insert1(const T c,unsigned index);
-    void insert1(const T c);
+    void insertfront1(const T val);
+    void insertend1(const T val);
+    void insert1(const T val,unsigned index);
+    void insert1(const T val);
     void removefirst1();
     void removeafterpos1(unsigned index);
     void remove1(unsigned index);
+    void removebyvalue1(T val);
     void removelast1();
 public:
-    void printlinked2(print_order backward_or_forward); 
-    void insertfront2(const T c);
-    void insert2(const T o,unsigned index);
-    void insert2(const T o);
-    void insertend2(const T o);
+    void insertfront2(const T val);
+    void insert2(const T val,unsigned index);
+    void insert2(const T val);
+    void insertend2(const T val);
     void removefirst2();
     void remove2(unsigned index);
+    void removebyvalue2(const T val);
     void removelast2();
 };
-#include "replace this text with directory in your of linked_list.cpp cpp file"
+template<class T>
+class Node{
+    T data;
+    Node* next;
+    Node* prev;
+public:
+    Node(const T data) {
+        this->data = data;
+        next = nullptr;
+        prev = nullptr;
+    }
+    Node() {
+        next = nullptr;
+        prev = nullptr;
+    }
+    T& operator*();
+    template<typename E>
+    friend class LinkedList;
+    friend ostream& operator<< <>(ostream& COUT, Node<T>& node);
+};
+template<class T>
+ostream& operator<<(ostream& COUT, Node<T>& node);
+#include "put path of linked_list.cpp"
 #endif // LINKED_LIST

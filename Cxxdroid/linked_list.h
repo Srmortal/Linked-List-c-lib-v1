@@ -6,77 +6,89 @@
 #include <deque>
 #include <iostream>
 #include <sstream>
-using namespace std;
-template<class T>
-class Node;
-template<class T>
-class LinkedList{
-private:
-    
-    Node<T> *head;
-    unsigned sz;
+#include <functional>
+#include <stdexcept>
+#include <initializer_list>
+enum class linked_list_type:bool{
+    singly=false,
+    doubly=true
+};
+template<class T, linked_list_type LT>
+class linked_list_iterator;
+template<class T,linked_list_type LT=linked_list_type::singly>
+class linked_list{
+    class node {
+        T data;
+        node* next;
+        node* prev;
+    public:
+        node(const T data = T()) {
+            this->data = data;
+            next = nullptr;
+            prev = nullptr;
+        }
+        friend class linked_list;
+        friend class linked_list_iterator<T, LT>;
+    } *head, *tail;
+    size_t sz;
 public:
-    LinkedList() {
-        head = nullptr;
+    linked_list() {
+        tail = head = nullptr;
         sz = 0;
     }
-    T operator[](unsigned index);
-    int search(T val);
-    Node<T>* operator+(int index);
-    Node<T> *searchptr(T val);
-    bool is_found(T val);
-    Node<T> *headgetter();
-    Node<T> *tailgetter();
-    int size();
-    unsigned sizeno();
+    linked_list(std::initializer_list<T> ils) {
+        for (auto& i : ils)
+        {
+            push_back(i);
+        }
+    }
+    T& operator[](unsigned index);
+    int search_by_index(T val);
+    int search_by_index(std::function<bool(const T&)> func); //this is for user defined classes like search by name,age,etc...
+    linked_list_iterator<T,LT> search(std::function<bool(const T&)> func); //this is for user defined classes like search by name,age,etc...
+    linked_list_iterator<T,LT> search(T val);
+    linked_list_iterator<T,LT> begin() const;
+    linked_list_iterator<T, LT> end() const;
+    linked_list_iterator<T, linked_list_type::doubly> rbegin() const;
+    linked_list_iterator<T, linked_list_type::doubly> rend() const;
+    size_t size();
     bool is_empty();
-    vector<T> to_vector();
-    string to_string();
-    stack<T> to_stack();
-    queue<T> to_queue();
-    deque<T> to_deque();
+    std::vector<T> to_vector();
+    std::string to_string();
+    std::stack<T> to_stack();
+    std::queue<T> to_queue();
+    std::deque<T> to_deque();
     void clear();
+    ~linked_list() {
+        clear();
+    }
 public:
-    void insertfront1(const T val);
-    void insertend1(const T val);
-    void insert1(const T val,unsigned index);
-    void insert1(const T val);
-    void removefirst1();
-    void removeafterpos1(unsigned index);
-    void remove1(unsigned index);
-    void removebyvalue1(T val);
-    void removelast1();
-public:
-    void insertfront2(const T val);
-    void insert2(const T val,unsigned index);
-    void insert2(const T val);
-    void insertend2(const T val);
-    void removefirst2();
-    void remove2(unsigned index);
-    void removebyvalue2(const T val);
-    void removelast2();
+    void push_front(const T val);
+    void push_back(const T val);
+    void insert(const T val,unsigned index);
+    void pop_front();
+    void erase(linked_list_iterator<T, LT> it);
+    void remove(T val);
+    void pop_back();
+    void reverse();
+    using iterator = linked_list_iterator<T,LT>;
+    friend class linked_list_iterator<T, LT>;
 };
-template<class T>
-class Node{
-    T data;
-    Node* next;
-    Node* prev;
+template<class T, linked_list_type LT=linked_list_type::singly>
+class linked_list_iterator{
+    typename linked_list<T, LT>::node* Node;
 public:
-    Node(const T data) {
-        this->data = data;
-        next = nullptr;
-        prev = nullptr;
+    linked_list_iterator(typename linked_list<T, LT>::node* n) : Node(n) {}
+    operator typename linked_list<T, LT>::node* () {
+        return Node;
     }
-    Node() {
-        next = nullptr;
-        prev = nullptr;
-    }
+    linked_list_iterator& operator++();
+    linked_list_iterator operator++(int);
     T& operator*();
-    template<typename E>
-    friend class LinkedList;
-    friend ostream& operator<< <>(ostream& COUT, Node<T>& node);
+    bool operator!=(const linked_list_iterator iter);
+    linked_list_iterator<T, linked_list_type::doubly>& operator--();
+    linked_list_iterator<T, linked_list_type::doubly> operator--(int);
+    friend class linked_list<T,LT>::node;
 };
-template<class T>
-ostream& operator<<(ostream& COUT, Node<T>& node);
-#include "put path of linked_list.cpp"
-#endif // LINKED_LIST
+#include "C:\Users\YOUSEF\OneDrive\Desktop\Cxxdroid\linked test.cxx"
+#endif //LINKED_LIST
